@@ -69,7 +69,7 @@ func TestSceneGetSet(t *testing.T) {
 }
 
 func TestSceneScale(t *testing.T) {
-	x, y := 5, 5
+	x, y := 100, 100
 	tmp_in := make([][]objects.Vector, x)
 	for i := 0; i < x; i++ {
 		tmp_in[i] = make([]objects.Vector, y)
@@ -84,8 +84,7 @@ func TestSceneScale(t *testing.T) {
 	for i := 0; i < x; i++ {
 		for j := 0; j < y; j++ {
 			r, g, b, a := res.At(i, j).RGBA()
-			if r != uint32(256*256-i) || g != uint32(256*256-j) || b != 0 || a != uint32(256*256-1) {
-				t.Errorf("TestSceneScale %v %v %v", r, uint32(256*256-i), g, uint32(256*256-j), a, uint32(256*256-1))
+			if r != uint32(256*(256-i)-1-i) || g != uint32(256*(256-j)-1-j) || b != 0 || a != uint32(256*256-1) {
 				bRes = true
 			}
 		}
@@ -93,15 +92,26 @@ func TestSceneScale(t *testing.T) {
 	if bRes {
 		t.Errorf("TestSceneScale 1 %v", res)
 	}
-	/*
-		res = scale(tmp_in, x, y, 10)
-		for i := 0; i < 10; i++ {
-			for j := 0; j < 10; j++ {
-				r, g, b, _ := res.At(i, j).RGBA()
-				//if r != uint32(i) || g != uint32(j) || b != 0 {
-					t.Errorf("TestSceneScale 2 %v %v %v %v %v", i, j, r, g, b, res)
-				//}
+
+	res = scale(tmp_in, x, y, 50)
+	for i := 0; i < 2; i++ {
+		for j := 0; j < 2; j++ {
+			r, g, b, a := res.At(0, 0).RGBA()
+			if r != 26214 || g != 26214 || b != 0 || a != uint32(256*256-1) {
+				t.Errorf("TestSceneScale 2 -1 %v %v %v %v", r, 26214, g, 26214)
+			}
+			r, g, b, a = res.At(0, 1).RGBA()
+			if r != 26214 || g != 13364 || b != 0 || a != uint32(256*256-1) {
+				t.Errorf("TestSceneScale 2 -2 %v %v %v %v", r, 26214, g, 13364)
+			}
+			r, g, b, a = res.At(1, 0).RGBA()
+			if r != 13364 || g != 26214 || b != 0 || a != uint32(256*256-1) {
+				t.Errorf("TestSceneScale 2 -3 %v %v %v %v", r, 13364, g, 26214)
+			}
+			r, g, b, a = res.At(1, 1).RGBA()
+			if r != 13364 || g != 13364 || b != 0 || a != uint32(256*256-1) {
+				t.Errorf("TestSceneScale 2 -4 %v %v %v %v", r, 13364, g, 13364)
 			}
 		}
-	*/
+	}
 }
