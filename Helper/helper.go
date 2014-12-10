@@ -44,3 +44,14 @@ func Round(val float64, places int) (newVal float64) {
 	}
 	return round / pow
 }
+
+//just a helper function for the limit func
+func HelperLimitation(value, min, max float64) float64 {
+	if value > max {
+		return max
+	}
+	if value < min {
+		return min
+	}
+	return value
+}

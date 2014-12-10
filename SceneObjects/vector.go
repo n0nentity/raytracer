@@ -6,6 +6,7 @@
 package objects
 
 import (
+	"de/vorlesung/projekt/raytracer/Helper"
 	"math"
 )
 
@@ -20,22 +21,11 @@ func (this *Vector) Length() float64 {
 	return math.Sqrt(this.X()*this.X() + this.Y()*this.Y() + this.Z()*this.Z())
 }
 
-//just a helper function for the limit func
-func helper(value, min, max float64) float64 {
-	if value > max {
-		return max
-	}
-	if value < min {
-		return min
-	}
-	return value
-}
-
 //limit of a vector
 func (this *Vector) Limit(min float64, max float64) *Vector {
-	tx := helper(this.X(), min, max)
-	ty := helper(this.Y(), min, max)
-	tz := helper(this.Z(), min, max)
+	tx := Helper.HelperLimitation(this.X(), min, max)
+	ty := Helper.HelperLimitation(this.Y(), min, max)
+	tz := Helper.HelperLimitation(this.Z(), min, max)
 
 	return NewVector(tx, ty, tz)
 }
