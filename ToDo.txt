@@ -1,7 +1,4 @@
-- Replace Eye --> Camera fixed	
-- Shadowing fixed
-- Phong fixed
-- Bug fixing: Plane fixed
-
-## new
-- testfunctions
+- Plausibiltität von diffuse, specularIntensity, specularPower,
+	reflectivity float64
+- unit test scene
+- unit test for SceneObject interface (compatibility)
