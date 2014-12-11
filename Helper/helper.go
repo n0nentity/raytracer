@@ -32,6 +32,7 @@ func (h *Helper) ImageWriter(filename string, m image.Image) error {
 }
 
 //rounding function
+//this function comes from: http://play.golang.org/p/yjfShH_uEy
 func Round(val float64, places int) (newVal float64) {
 	var round float64
 	pow := math.Pow(10, float64(places))

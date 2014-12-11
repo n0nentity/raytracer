@@ -36,36 +36,36 @@ func (s *Scene) Render(x, y int, superSample int) image.Image {
 
 	for i := 0; i < tmp_x; i++ {
 		tmp_img[i] = make([]objects.Vector, tmp_y)
-		// for j := 0; j < tmp_y; j++ {
+		for j := 0; j < tmp_y; j++ {
 
-		// 	posZ := rasterStart.Z() + (float64(i)+0.5)*rasterSizeZ
-		// 	posY := rasterStart.Y() + (float64(j)+0.5)*rasterSizeY
-		// 	gridPos := objects.NewVector(rasterStart.X(), posY, posZ)
+			posZ := rasterStart.Z() + (float64(i)+0.5)*rasterSizeZ
+			posY := rasterStart.Y() + (float64(j)+0.5)*rasterSizeY
+			gridPos := objects.NewVector(rasterStart.X(), posY, posZ)
 
-		// 	var color, _ = s.followRay(s.View(), gridPos.Sub(s.View()), nil, 8)
-		// 	if color == nil {
-		// 		color = s.skyColor
-		// 	}
+			var color, _ = s.raytracing(s.View(), gridPos.SubtractVector(s.View()), nil, 8)
+			if color == nil {
+				color = s.skyColor
+			}
 
-		// 	tmp_img[i][j] = *color
-		// }
+			tmp_img[i][j] = *color
+		}
 
 		//parallel rendering
-		go func(i, tmp_y int, tmp_img [][]objects.Vector) {
-			for j := 0; j < tmp_y; j++ {
+		// go func(i, tmp_y int, tmp_img [][]objects.Vector) {
+		// 	for j := 0; j < tmp_y; j++ {
 
-				posZ := rasterStart.Z() + (float64(i)+0.5)*rasterSizeZ
-				posY := rasterStart.Y() + (float64(j)+0.5)*rasterSizeY
-				gridPos := objects.NewVector(rasterStart.X(), posY, posZ)
+		// 		posZ := rasterStart.Z() + (float64(i)+0.5)*rasterSizeZ
+		// 		posY := rasterStart.Y() + (float64(j)+0.5)*rasterSizeY
+		// 		gridPos := objects.NewVector(rasterStart.X(), posY, posZ)
 
-				var color, _ = s.raytracing(s.View(), gridPos.SubtractVector(s.View()), nil, 8)
-				if color == nil {
-					color = s.skyColor
-				}
+		// 		var color, _ = s.raytracing(s.View(), gridPos.SubtractVector(s.View()), nil, 8)
+		// 		if color == nil {
+		// 			color = s.skyColor
+		// 		}
 
-				tmp_img[i][j] = *color
-			}
-		}(i, tmp_y, tmp_img)
+		// 		tmp_img[i][j] = *color
+		// 	}
+		// }(i, tmp_y, tmp_img)
 	}
 	return scale(tmp_img, tmp_x, tmp_y, superSample)
 }
@@ -96,7 +96,7 @@ func scale(in [][]objects.Vector, size_x, size_y, factor int) *image.RGBA {
 	return out
 }
 
-//the recursive raytracing function, recursion in line 116
+//the recursive raytracing function
 func (this *Scene) raytracing(position, direction *objects.Vector, ignored SceneObject, depthLeft uint8) (*objects.Vector, *objects.Vector) {
 	Ray := objects.NewRay(position, direction)
 

@@ -1,9 +1,57 @@
 package scene
 
 import (
+	"de/vorlesung/projekt/raytracer/Helper"
 	objects "de/vorlesung/projekt/raytracer/SceneObjects"
 	"testing"
 )
+
+func TestRender(t *testing.T) {
+
+}
+
+func Builder() *Scene {
+	sphere1 := objects.NewSphere(objects.NewVector(0.0, 0.0, 1.0), 1.0)
+	sphere2 := objects.NewSphere(objects.NewVector(-2.5, 0.0, -0.75), 1.0)
+	plane := objects.NewPlane(objects.NewVector(0.0, -1.0, 0.0), objects.NewVector(0.0, 1.0, 0.0))
+
+	basicBlue := objects.NewVector(0.54, 0.60, 0.90)
+	neonYellow := objects.NewVector(1.0, 2.0, 0.0)
+
+	grid1 := NewGrid(objects.NewVector(2.0, 1.00, -1.0), objects.NewVector(2.0, -0.50, 1.0))
+	ball1 := NewBall(sphere1, basicBlue, 0.9, 4.0, 30.0, 0.125)
+	ball2 := NewBall(sphere2, neonYellow, 0.9, 4.0, 30.0, 0.125)
+
+	surface1 := NewSurface(plane, objects.NewVector(1.0, 1.0, 1.0), 1.0, 1.0, 8.0, 0.05)
+	light1 := NewLight(objects.NewVector(1.0, 4.0, 0.5), objects.NewVector(1.0, 1.0, 1.0))
+
+	colorSky := objects.NewVector(0.85, 0.85, 0.95)
+
+	currentScene := NewScene(objects.NewVector(4.0, 0.5, 0.0), grid1)
+	currentScene.AddElement(SceneObject(ball1))
+	currentScene.AddElement(SceneObject(ball2))
+	currentScene.AddElement(SceneObject(surface1))
+	currentScene.SetAmbient(objects.NewVector(0.25, 0.25, 0.3))
+	currentScene.SetLight(light1)
+	currentScene.SetSkyColor(colorSky)
+
+	return currentScene
+}
+
+func TestRaytracing(t *testing.T) {
+	scene := Builder()
+	color, position := scene.raytracing(objects.NewVector(4.0, 0.0, 0.0), objects.NewVector(-1.0, 0.0, 0.0), nil, 8)
+	r := Helper.Round(color.X(), 4)
+	g := Helper.Round(color.Y(), 4)
+	b := Helper.Round(color.Z(), 4)
+	//if color.X() != 0.203724 || color.Y() != 0.253906 || color.Z() != 0.251094 {
+	if r != 0.2037 || g != 0.2539 || b != 0.2511 {
+		t.Errorf("Color expected VEC(0.203724, 0.253906, 0.251094), actual(%f, %f, %f)", r, g, b)
+	}
+	if position.X() != 0.0 || position.Y() != 0.0 || position.Z() != 0.0 {
+		t.Errorf("Position expected VEC(0.0, 0.0, 0.0), actual(%f, %f, %f)", position.X(), position.Y(), position.Z())
+	}
+}
 
 func TestNewScene(t *testing.T) {
 	defer func() {
