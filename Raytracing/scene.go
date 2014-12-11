@@ -180,11 +180,11 @@ func (p *Scene) intersectAll(Ray *objects.Ray, ignored SceneObject) (intersectOb
 			continue
 		}
 
-		var intersectP, col, norm, dif, spInt, spPow, ref = element.Intersection(Ray)
+		intersectP, col, norm, dif, spInt, spPow, ref := element.Intersection(Ray)
 		if intersectP == nil {
 			continue
 		}
-		var length = intersectP.SubtractVector(Ray.Origin()).Length()
+		length := intersectP.SubtractVector(Ray.Origin()).Length()
 		if length < nearestDist {
 			intersectObject = element
 			intersectPos = intersectP

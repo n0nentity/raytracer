@@ -38,6 +38,17 @@ func Builder() *Scene {
 	return currentScene
 }
 
+func TestIntersection(t *testing.T) {
+	scene := Builder()
+	r := objects.NewRay(objects.NewVector(2.0, 0.0, 0.0), objects.NewVector(-3.0, 0.0, 0.0))
+
+	_, p, _, _, _, _, _, _, _ := scene.intersectAll(r, nil)
+	x := Helper.Round(p.X(), 5)
+	if x != -1.83857 || p.Y() != 0.0 || p.Z() != 0.0 {
+		t.Errorf("Intersect expected VEC(1.0, 0.0, 0.0), actual(%f, %f, %f", x, p.Y(), p.Z())
+	}
+}
+
 func TestRaytracing(t *testing.T) {
 	scene := Builder()
 	color, position := scene.raytracing(objects.NewVector(4.0, 0.0, 0.0), objects.NewVector(-1.0, 0.0, 0.0), nil, 8)
@@ -46,10 +57,10 @@ func TestRaytracing(t *testing.T) {
 	b := Helper.Round(color.Z(), 4)
 	//if color.X() != 0.203724 || color.Y() != 0.253906 || color.Z() != 0.251094 {
 	if r != 0.2037 || g != 0.2539 || b != 0.2511 {
-		t.Errorf("Color expected VEC(0.203724, 0.253906, 0.251094), actual(%f, %f, %f)", r, g, b)
+		t.Errorf("Color expected VEC(0.203724, 0.253906, 0.251094) actual(%f, %f, %f)", r, g, b)
 	}
 	if position.X() != 0.0 || position.Y() != 0.0 || position.Z() != 0.0 {
-		t.Errorf("Position expected VEC(0.0, 0.0, 0.0), actual(%f, %f, %f)", position.X(), position.Y(), position.Z())
+		t.Errorf("Position expected VEC(0.0, 0.0, 0.0) actual(%f, %f, %f)", position.X(), position.Y(), position.Z())
 	}
 }
 
