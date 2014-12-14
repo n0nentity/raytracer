@@ -1,3 +1,5 @@
+//Copyright (c) 2014 Michael Heier 8311689, Patrick Dahlke 2458357
+
 //Package Helper implements neccessary helper functions
 package Helper
 

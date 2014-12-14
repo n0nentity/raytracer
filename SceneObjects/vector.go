@@ -1,3 +1,5 @@
+//Copyright (c) 2014 Michael Heier 8311689, Patrick Dahlke 2458357
+
 //Package objects implements the scene objects: vector, ray, plane and sphere,
 // vector = Vektor,
 // ray = Lichtstrahl,

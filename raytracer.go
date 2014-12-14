@@ -1,6 +1,6 @@
 /*The MIT License (MIT)
 
-Copyright (c) 2014 Michael Heier, Patrick Dahlke
+Copyright (c) 2014 Michael Heier 8311689, Patrick Dahlke 2458357
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
