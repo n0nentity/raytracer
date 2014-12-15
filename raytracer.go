@@ -22,11 +22,11 @@ THE SOFTWARE.
 */
 
 /*!!!!!!!!!!!!!
-SOURCES where ideas and implementation comes from:
-http://groups.csail.mit.edu/graphics/classes/6.837/F98/Lecture20/RayTrace.java
-https://raytracer.codeplex.com/
-https://bitbucket.org/zombiezen/goray/wiki/Home
-http://max-tettenborn.de/?p=402
+SOURCES where implementation ideas comes from:
+http://groups.csail.mit.edu/graphics/classes/6.837/F98/Lecture20/RayTrace.java, 01.12.2014
+https://raytracer.codeplex.com/, 29.11.2014
+https://bitbucket.org/zombiezen/goray/wiki/Home, 28.11.2014
+http://max-tettenborn.de/?p=402, 28.11.2014
 */
 
 package main
