@@ -6,6 +6,7 @@ import (
 	"de/vorlesung/projekt/raytracer/Helper"
 	scene "de/vorlesung/projekt/raytracer/Raytracing"
 	objects "de/vorlesung/projekt/raytracer/SceneObjects"
+	"image/color/palette"
 	"log"
 	"os"
 	"path"
@@ -27,15 +28,18 @@ func BenchmarkRaytracer(be *testing.B) {
 		log.Println("Start rendering: ", filename)
 
 		sphere1 := objects.NewSphere(objects.NewVector(0.0, 0.0, 1.0), 1.0)
-		sphere2 := objects.NewSphere(objects.NewVector(float64(-i)-2.5, 0.0, -0.75), 1.0)
+		sphere2 := objects.NewSphere(objects.NewVector(float64(-i)-2.5, 0.0, -0.75), 1.0+0.2*float64(i))
 		plane := objects.NewPlane(objects.NewVector(0.0, -1.0, 0.0), objects.NewVector(0.0, 1.0, 0.0))
 
-		basicBlue := objects.NewVector(0.54, 0.60, 0.90)
-		neonYellow := objects.NewVector(1.0, 2.0, 0.0)
+		r1, g1, b1, _ := palette.Plan9[i*2].RGBA()
+		r2, g2, b2, _ := palette.Plan9[20-i*2-1].RGBA()
+
+		color1 := objects.NewVector(float64(r1)/255, float64(g1)/255, float64(b1)/255)
+		color2 := objects.NewVector(float64(r2)/255, float64(g2)/255, float64(b2)/255)
 
 		grid1 := scene.NewGrid(objects.NewVector(2.0, 1.00, -1.0), objects.NewVector(2.0, -0.50, 1.0))
-		ball1 := scene.NewBall(sphere1, basicBlue, 0.9, 4.0, 30.0, 0.125)
-		ball2 := scene.NewBall(sphere2, neonYellow, 0.9, 4.0, 30.0, 0.125)
+		ball1 := scene.NewBall(sphere1, color1, 0.9, 4.0, 30.0, 0.125)
+		ball2 := scene.NewBall(sphere2, color2, 0.9, 4.0, 30.0, 0.125)
 
 		surface1 := scene.NewSurface(plane, objects.NewVector(1.0, 1.0, 1.0), 1.0, 1.0, 8.0, 0.05)
 		light1 := scene.NewLight(objects.NewVector(1.0, 4.0, 0.5), objects.NewVector(1.0, 1.0, 1.0))
