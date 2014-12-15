@@ -28,8 +28,14 @@ func NewPlane(pos, normal *Vector) *Plane {
 
 //Getters and Setters
 
-//returns the position of the plane
-func (p *Plane) Position() *Vector        { return p.pos }
-func (p *Plane) Normal() *Vector          { return p.normal }
-func (p *Plane) SetPosition(pos *Vector)  { p.pos = pos }
+//returns the position vector
+func (p *Plane) Position() *Vector { return p.pos }
+
+//returns the normal vector
+func (p *Plane) Normal() *Vector { return p.normal }
+
+//sets the position
+func (p *Plane) SetPosition(pos *Vector) { p.pos = pos }
+
+//sets the normal
 func (p *Plane) SetNormal(normal *Vector) { p.normal = normal }
