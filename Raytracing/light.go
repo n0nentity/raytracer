@@ -19,7 +19,14 @@ func NewLight(position, color *objects.Vector) *Light {
 	return light
 }
 
-func (this *Light) Position() *objects.Vector            { return this.position }
-func (this *Light) Color() *objects.Vector               { return this.color }
+//returns the position
+func (this *Light) Position() *objects.Vector { return this.position }
+
+//returns the color
+func (this *Light) Color() *objects.Vector { return this.color }
+
+//sets the position
 func (this *Light) SetPosition(position *objects.Vector) { this.position = position }
-func (this *Light) SetColor(color *objects.Vector)       { this.color = color }
+
+//sets the color
+func (this *Light) SetColor(color *objects.Vector) { this.color = color }
