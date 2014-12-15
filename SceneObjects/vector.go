@@ -5,7 +5,7 @@
 // ray = Lichtstrahl,
 // plane = Ebene,
 // sphere = Kugel
-package objects
+package SceneObjects
 
 import (
 	"de/vorlesung/projekt/raytracer/Helper"

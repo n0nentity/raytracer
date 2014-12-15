@@ -1,7 +1,7 @@
 //Copyright (c) 2014 Michael Heier 8311689, Patrick Dahlke 2458357
 
 //Package Scene
-package scene
+package Raytracing
 
 import (
 	objects "de/vorlesung/projekt/raytracer/SceneObjects"

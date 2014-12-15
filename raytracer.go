@@ -21,6 +21,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+/*!!!!!!!!!!!!!
+SOURCES where ideas and implementation comes from:
+http://groups.csail.mit.edu/graphics/classes/6.837/F98/Lecture20/RayTrace.java
+https://raytracer.codeplex.com/
+https://bitbucket.org/zombiezen/goray/wiki/Home
+http://max-tettenborn.de/?p=402
+*/
+
 package main
 
 import (
@@ -36,7 +44,7 @@ import (
 //the raytracer main method
 func main() {
 	numcpu := runtime.NumCPU()
-	runtime.GOMAXPROCS(numcpu)
+	runtime.GOMAXPROCS(numcpu) //use all cores while concurrent rendering
 
 	h := new(Helper.Helper)
 	width := 640

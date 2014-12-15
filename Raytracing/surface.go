@@ -1,6 +1,6 @@
 //Copyright (c) 2014 Michael Heier 8311689, Patrick Dahlke 2458357
 
-package scene
+package Raytracing
 
 import (
 	"de/vorlesung/projekt/raytracer/Helper"
