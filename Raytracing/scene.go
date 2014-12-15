@@ -134,26 +134,26 @@ func (this *Scene) raytracing(position, direction *objects.Vector, ignored Scene
 	return color, intersectPos
 }
 
-func (p *Scene) isShadow(intersectPos, directionToLight *objects.Vector, intersectObject SceneObject) bool {
+func (s *Scene) isShadow(intersectPos, directionToLight *objects.Vector, intersectObject SceneObject) bool {
 	r := objects.NewRay(intersectPos, directionToLight)
-	_, pos, _, _, _, _, _, _, _ := p.intersectAll(r, intersectObject)
+	_, pos, _, _, _, _, _, _, _ := s.intersectAll(r, intersectObject)
 	return pos != nil
 }
 
 //calculates the phone
-func (p *Scene) phongCalculation(intersectObject SceneObject, intersectPos *objects.Vector, ray *objects.Ray, normal *objects.Vector,
+func (s *Scene) phongCalculation(intersectObject SceneObject, intersectPos *objects.Vector, ray *objects.Ray, normal *objects.Vector,
 	diffuse, specularIntensity,
 	specularPower float64) (phongColor, phongSpecular *objects.Vector) {
 
-	phongColor = p.ambient
+	phongColor = s.Ambient()
 	phongSpecular = objects.NewVector(0.0, 0.0, 0.0)
 
-	directionToLight := p.light.Position().SubtractVector(intersectPos).Normalized()
-	if !p.isShadow(intersectPos, directionToLight, intersectObject) {
+	directionToLight := s.Light().Position().SubtractVector(intersectPos).Normalized()
+	if !s.isShadow(intersectPos, directionToLight, intersectObject) {
 
 		directionFromLight := directionToLight.MultiplyValue(-1)
 		normal = normal.Normalized()
-		phongDiffuse := p.light.Color().MultiplyValue(diffuse*directionToLight.DotProduct(normal)).Limit(0, 1)
+		phongDiffuse := s.Light().Color().MultiplyValue(diffuse*directionToLight.DotProduct(normal)).Limit(0, 1)
 
 		directionLightOut := directionFromLight.Reflection(normal).Normalized()
 		directionIntersectView := ray.Origin().SubtractVector(intersectPos).Normalized()
@@ -161,7 +161,7 @@ func (p *Scene) phongCalculation(intersectObject SceneObject, intersectPos *obje
 		if specularAmount < 0 {
 			specularAmount = 0
 		}
-		phongSpecular = p.light.Color().MultiplyValue(specularIntensity*math.Pow(specularAmount, specularPower)).Limit(0, 1)
+		phongSpecular = s.Light().Color().MultiplyValue(specularIntensity*math.Pow(specularAmount, specularPower)).Limit(0, 1)
 
 		phongColor = phongColor.AddVector(phongDiffuse).Limit(0, 1)
 	}
@@ -169,13 +169,13 @@ func (p *Scene) phongCalculation(intersectObject SceneObject, intersectPos *obje
 }
 
 //intersects all elements in the current scene to calculate the shadow
-func (p *Scene) intersectAll(Ray *objects.Ray, ignored SceneObject) (intersectObject SceneObject,
+func (s *Scene) intersectAll(Ray *objects.Ray, ignored SceneObject) (intersectObject SceneObject,
 	intersectPos, color, normal *objects.Vector,
 	diffuse, specularIntensity, specularPower,
 	reflectivity, nearestDist float64) {
 
 	nearestDist = math.Inf(1)
-	for _, element := range p.elements {
+	for _, element := range s.Elements() {
 		if ignored != nil && element == ignored {
 			continue
 		}
@@ -216,17 +216,41 @@ func NewScene(view *objects.Vector, grid *Grid) *Scene {
 }
 
 //Getters and Setters
-//
-func (s *Scene) View() *objects.Vector                { return s.view }
-func (s *Scene) Grid() *Grid                          { return s.grid }
-func (s *Scene) Elements() []SceneObject              { return s.elements }
-func (s *Scene) Ambient() *objects.Vector             { return s.ambient }
-func (s *Scene) Light() *Light                        { return s.light }
-func (s *Scene) SkyColor() *objects.Vector            { return s.skyColor }
-func (s *Scene) SetView(view *objects.Vector)         { s.view = view }
-func (s *Scene) SetGrid(grid *Grid)                   { s.grid = grid }
-func (s *Scene) SetElements(elements []SceneObject)   { s.elements = elements }
-func (s *Scene) SetAmbient(ambient *objects.Vector)   { s.ambient = ambient }
-func (s *Scene) SetLight(light *Light)                { s.light = light }
+//returns the view
+func (s *Scene) View() *objects.Vector { return s.view }
+
+//returns the grid
+func (s *Scene) Grid() *Grid { return s.grid }
+
+//returns the elements of the scene (slice)
+func (s *Scene) Elements() []SceneObject { return s.elements }
+
+//returns the ambient
+func (s *Scene) Ambient() *objects.Vector { return s.ambient }
+
+//returns the light
+func (s *Scene) Light() *Light { return s.light }
+
+//returns the skycolor
+func (s *Scene) SkyColor() *objects.Vector { return s.skyColor }
+
+//sets the view
+func (s *Scene) SetView(view *objects.Vector) { s.view = view }
+
+//sets the grid
+func (s *Scene) SetGrid(grid *Grid) { s.grid = grid }
+
+//sets the element slice
+func (s *Scene) SetElements(elements []SceneObject) { s.elements = elements }
+
+//sets the ambient
+func (s *Scene) SetAmbient(ambient *objects.Vector) { s.ambient = ambient }
+
+//sets the light
+func (s *Scene) SetLight(light *Light) { s.light = light }
+
+//sets the skycolor
 func (s *Scene) SetSkyColor(skyColor *objects.Vector) { s.skyColor = skyColor }
-func (s *Scene) AddElement(element SceneObject)       { s.elements = append(s.elements, element) }
+
+//adds an element to the element slice
+func (s *Scene) AddElement(element SceneObject) { s.elements = append(s.elements, element) }
