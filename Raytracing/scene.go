@@ -6,7 +6,6 @@ import (
 	objects "de/vorlesung/projekt/raytracer/SceneObjects"
 	"image"
 	imageColor "image/color"
-	"log"
 	"math"
 )
 
@@ -26,50 +25,49 @@ type Scene struct {
 
 //the general rendering function for the current scene,
 //returns the image which one the imageWriter in the helper package saves to disk
-func (s *Scene) Render(x, y int, superSample int) image.Image {
-	log.Println("Start rendering (function) Image\n")
-	tmp_x := x * superSample
-	tmp_y := y * superSample
-	tmp_img := make([][]objects.Vector, tmp_x)
+func (s *Scene) Render(x, y, supersampling int) image.Image {
+	x2 := x * supersampling
+	y2 := y * supersampling
+	img := make([][]objects.Vector, x2)
 
-	rasterStart := s.grid.TopLeft()
-	rasterSizeZ := math.Abs(rasterStart.Z()-s.grid.BottomRight().Z()) / float64(tmp_x)
-	rasterSizeY := -math.Abs(rasterStart.Y()-s.grid.BottomRight().Y()) / float64(tmp_y)
+	starting := s.Grid().TopLeft()
+	sizeZ := math.Abs(starting.Z()-s.Grid().BottomRight().Z()) / float64(x2)
+	sizeY := -math.Abs(starting.Y()-s.Grid().BottomRight().Y()) / float64(y2)
 
-	for i := 0; i < tmp_x; i++ {
-		tmp_img[i] = make([]objects.Vector, tmp_y)
-		for j := 0; j < tmp_y; j++ {
+	for i := 0; i < x2; i++ {
+		img[i] = make([]objects.Vector, y2)
+		for j := 0; j < y2; j++ {
+			posZ := starting.Z() + (float64(i)+0.5)*sizeZ
+			posY := starting.Y() + (float64(j)+0.5)*sizeY
+			gridPosition := objects.NewVector(starting.X(), posY, posZ)
 
-			posZ := rasterStart.Z() + (float64(i)+0.5)*rasterSizeZ
-			posY := rasterStart.Y() + (float64(j)+0.5)*rasterSizeY
-			gridPos := objects.NewVector(rasterStart.X(), posY, posZ)
-
-			var color, _ = s.raytracing(s.View(), gridPos.SubtractVector(s.View()), nil, 8)
+			color, _ := s.raytracing(s.View(), gridPosition.SubtractVector(s.View()), nil, 8)
 			if color == nil {
-				color = s.skyColor
+				color = s.SkyColor()
 			}
 
-			tmp_img[i][j] = *color
+			img[i][j] = *color
 		}
 
-		//parallel rendering
-		// go func(i, tmp_y int, tmp_img [][]objects.Vector) {
-		// 	for j := 0; j < tmp_y; j++ {
+		//parallel rendering..
+		//race condition !!! can be that the image is saved but we are still working on it
+		// go func(i, y2 int, img [][]objects.Vector) {
+		// 	for j := 0; j < y2; j++ {
 
-		// 		posZ := rasterStart.Z() + (float64(i)+0.5)*rasterSizeZ
-		// 		posY := rasterStart.Y() + (float64(j)+0.5)*rasterSizeY
-		// 		gridPos := objects.NewVector(rasterStart.X(), posY, posZ)
+		// 		posZ := starting.Z() + (float64(i)+0.5)*sizeZ
+		// 		posY := starting.Y() + (float64(j)+0.5)*sizeY
+		// 		gridPosition := objects.NewVector(starting.X(), posY, posZ)
 
-		// 		var color, _ = s.raytracing(s.View(), gridPos.SubtractVector(s.View()), nil, 8)
+		// 		color, _ := s.raytracing(s.View(), gridPosition.SubtractVector(s.View()), nil, 8)
 		// 		if color == nil {
 		// 			color = s.skyColor
 		// 		}
 
-		// 		tmp_img[i][j] = *color
+		// 		img[i][j] = *color
 		// 	}
-		// }(i, tmp_y, tmp_img)
+		// }(i, y2, img)
 	}
-	return scale(tmp_img, tmp_x, tmp_y, superSample)
+	return scale(img, x2, y2, supersampling)
 }
 
 //scaling function
@@ -218,16 +216,17 @@ func NewScene(view *objects.Vector, grid *Grid) *Scene {
 }
 
 //Getters and Setters
-func (p *Scene) View() *objects.Vector                { return p.view }
-func (p *Scene) Grid() *Grid                          { return p.grid }
-func (p *Scene) Elements() []SceneObject              { return p.elements }
-func (p *Scene) Ambient() *objects.Vector             { return p.ambient }
-func (p *Scene) Light() *Light                        { return p.light }
-func (p *Scene) SkyColor() *objects.Vector            { return p.skyColor }
-func (p *Scene) SetView(view *objects.Vector)         { p.view = view }
-func (p *Scene) SetGrid(grid *Grid)                   { p.grid = grid }
-func (p *Scene) SetElements(elements []SceneObject)   { p.elements = elements }
-func (p *Scene) SetAmbient(ambient *objects.Vector)   { p.ambient = ambient }
-func (p *Scene) SetLight(light *Light)                { p.light = light }
-func (p *Scene) SetSkyColor(skyColor *objects.Vector) { p.skyColor = skyColor }
-func (p *Scene) AddElement(element SceneObject)       { p.elements = append(p.elements, element) }
+//
+func (s *Scene) View() *objects.Vector                { return s.view }
+func (s *Scene) Grid() *Grid                          { return s.grid }
+func (s *Scene) Elements() []SceneObject              { return s.elements }
+func (s *Scene) Ambient() *objects.Vector             { return s.ambient }
+func (s *Scene) Light() *Light                        { return s.light }
+func (s *Scene) SkyColor() *objects.Vector            { return s.skyColor }
+func (s *Scene) SetView(view *objects.Vector)         { s.view = view }
+func (s *Scene) SetGrid(grid *Grid)                   { s.grid = grid }
+func (s *Scene) SetElements(elements []SceneObject)   { s.elements = elements }
+func (s *Scene) SetAmbient(ambient *objects.Vector)   { s.ambient = ambient }
+func (s *Scene) SetLight(light *Light)                { s.light = light }
+func (s *Scene) SetSkyColor(skyColor *objects.Vector) { s.skyColor = skyColor }
+func (s *Scene) AddElement(element SceneObject)       { s.elements = append(s.elements, element) }
