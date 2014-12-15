@@ -1,7 +1,8 @@
-2014/12/11 14:14:36 ################################
-2014/12/11 14:14:36 start rendering
-2014/12/11 14:14:36 Start rendering (function) Image
+2014/12/15 09:14:28 ################################
+2014/12/15 09:14:28 start rendering
+2014/12/15 09:14:28 Rendering time: 
+2014/12/15 09:14:28 Start rendering (function) Image
 
-2014/12/11 14:14:38 Rendering time:  1.8632365s
-2014/12/11 14:14:38 Saving Image
-2014/12/11 14:14:38 image writing finished
+2014/12/15 09:14:43 Rendering time:  14.5558325s
+2014/12/15 09:14:43 Saving Image
+2014/12/15 09:14:43 Error in image write:  open C:\Users\heiermi\AppData\Local\Temp/raytracer/out_2014-12-15 09:14:28.9150868 +0100 CET.png: Die Syntax für den Dateinamen, Verzeichnisnamen oder die Datenträgerbezeichnung ist falsch.
