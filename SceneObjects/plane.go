@@ -20,7 +20,7 @@ func (p *Plane) Intersection(ray *Ray) *Vector {
 
 //creates a new instance of a plane
 func NewPlane(pos, normal *Vector) *Plane {
-	var tmp = new(Plane)
+	tmp := new(Plane)
 	tmp.SetPosition(pos)
 	tmp.SetNormal(normal)
 	return tmp
