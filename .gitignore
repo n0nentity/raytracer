@@ -22,6 +22,7 @@ _testmain.go
 *.exe
 *.test
 *.prof
+*.png
 SceneObjects/coverage.out
 out.png
 logfile
